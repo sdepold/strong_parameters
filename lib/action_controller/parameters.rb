@@ -194,6 +194,9 @@ module ActionController
           if filter[key] == []
             # Declaration {:comment_ids => []}.
             array_of_permitted_scalars_filter(params, key)
+          elsif filter[key] == ::StrongParameters::ANY
+            # Declaration {:custom_json => :*} or {:custom_json => StrongParameters::ANY}
+            params[key] = value
           else
             # Declaration {:user => :name} or {:user => [:name, :age, {:adress => ...}]}.
             params[key] = each_element(value) do |element, index|
