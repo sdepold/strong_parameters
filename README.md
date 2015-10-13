@@ -79,6 +79,26 @@ params.require(:token)
 params.require(:post).permit(:title)
 ```
 
+## Permitted parameter branches
+
+In some scenarios it can be useful to mark a branch of the parameter hash as trusted so that a key
+is just permitted independent from whether or not it's value is a scalar or matches a specific structure.
+You can express that trust like this:
+
+```
+params = ActionController::Parameters.new({
+  :id => 'foo',
+  :custom_json => {
+    :bar => 'baz',
+    :very => 'customizable'
+  }
+})
+params.permit({:custom_json => StrongParameters::ANY})
+
+# ==>
+# {:custom_json => {:bar => 'baz', :very => 'customizable'}}
+```
+
 ## Handling of Unpermitted Keys
 
 By default parameter keys that are not explicitly permitted will be logged in the development and test environment. In other environments these parameters will simply be filtered out and ignored.
