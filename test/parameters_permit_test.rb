@@ -346,4 +346,21 @@ class NestedParametersTest < ActiveSupport::TestCase
       assert !hash.permitted?
     end
   end
+
+  test "trusted values of nested parameters" do
+    params = ActionController::Parameters.new({
+      :resource => {
+        :id => 'foo',
+        :custom_json => {
+          :bar => 'baz',
+          :qux => {
+            quux: 1
+          }
+        }
+      }
+    })
+    permitted = params.permit(:resource => [{ :custom_json => StrongParameters::ANY }])
+    assert_nil permitted[:resource][:id]
+    assert_not_nil permitted[:resource][:custom_json]
+  end
 end

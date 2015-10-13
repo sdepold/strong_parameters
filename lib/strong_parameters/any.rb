@@ -1,0 +1,3 @@
+module StrongParameters
+  ANY = :*
+end
